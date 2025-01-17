@@ -78,7 +78,7 @@ with col2:
 
         st.markdown('<h3 >From author of analize:</h3>', unsafe_allow_html=True)
 
-        st.markdown('<p class="custom-text">Columns: The analysis does not concern the economy, economic, political, geopolitycal, aspects, or sociological trends.The author`s objective was to find an interesting topic and conduct a simple Exploratory Data Analysis (EDA). In this case, the focus was on "The 500 richest businessmen in the world, aiming to identify an intriguing issue and present it in a straightforward manner. In addition to the overall analysis of billionaire assets, the work also includes an analysis of countries such as the: USA, China.</p>', unsafe_allow_html=True)
+        st.markdown('<p class="custom-text">Columns: The analysis does not concern the economy, economic, political, geopolitycal, aspects, or sociological trends.The author`s objective was to find an interesting topic and conduct a simple Exploratory Data Analysis (EDA). In this case, the focus was on "The 500 richest businessmen in the world, aiming to identify an intriguing issue and present it in a straightforward manner. In addition to the overall analysis of billionaire assets, the work also includes tools for an analysis of countries such as the: USA, China, India, Russia, Germany</p>', unsafe_allow_html=True)
 
         st.markdown('<h3 >Changes made:</h3>', unsafe_allow_html=True)
 
