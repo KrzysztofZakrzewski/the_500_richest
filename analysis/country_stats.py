@@ -21,3 +21,24 @@ def country_counts_with_percentage(df: pd.DataFrame) -> tuple[pd.Series, pd.Seri
     counts = df['Country / Region'].value_counts()
     percentage = (counts / len(df)) * 100
     return counts, percentage
+
+
+# --- Calculate the number of records fer industry
+@st.cache_data
+def compute_industry_counts(df: pd.DataFrame) -> tuple[pd.Series, pd.Series]:
+    """
+    Compute number and percentage of billionaires per industry.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        Input dataset containing the 'Industry' column.
+
+    Returns
+    -------
+    tuple[pd.Series, pd.Series]
+        Counts and percentage share per industry.
+    """
+    counts = df["Industry"].value_counts()
+    percentage = (counts / len(df)) * 100
+    return counts, percentage

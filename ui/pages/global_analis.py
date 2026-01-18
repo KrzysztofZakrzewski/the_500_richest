@@ -6,8 +6,10 @@ import plotly.express as px
 # import statsmodels.api as sm
 import io
 
-from analysis.country_stats import country_counts_with_percentage
-from visualization.plots import country_barplot
+from analysis.country_stats import country_counts_with_percentage, compute_industry_counts
+from visualization.plots import country_barplot, industry_barplot
+from analysis.data_overview import compute_basic_overview
+from ui.components.data_overview import render_basic_overview
 
 #==============
 # RENDER GLOBAL ANALIS
@@ -26,37 +28,17 @@ def render_global_analysis(df: pd.DataFrame) -> None:
     #==============
     # EDA
     #==============
-
+    
+    #==============
     # --- STEP 1 - General Overview 
      
-    st.markdown('<h3 ># STEP 1: General Overview of the Data (Technical Aspects)</h3>', unsafe_allow_html=True)
+    st.markdown('<h3> STEP 1: General Overview of the Data (Technical Aspects)</h3>', unsafe_allow_html=True)
 
+    # --- Compiuting and rendering basic overview
+    overview = compute_basic_overview(df)
+    render_basic_overview(df, overview, info_str)
 
-    # df.info w Streamlit
-    st.markdown('<h4>Basic information:</h4>', unsafe_allow_html=True)
-    st.text(info_str)
-
-    # cols and rows
-    num_columns = df.shape[1]
-    num_rows = df.shape[0]
-    st.write(f"Columns: {num_columns}")
-    st.write(f"Rows: {num_rows}")
-
-    # nunique values
-    st.markdown('<h4>Nunique values</h4>', unsafe_allow_html=True)
-    st.write(df.nunique())
-
-    st.markdown('<h4>Unique values in total:</h4>', unsafe_allow_html=True)
-    unique_values_total = df.nunique().sum()
-    st.write(f'{unique_values_total}')
-    st.markdown('<p class="custom-text">No missing values</p>', unsafe_allow_html=True)
-    st.markdown('<p class="custom-text">No duplicates</p>', unsafe_allow_html=True)
-
-    # Descritive Statistics
-    st.markdown('<h4>Descritive Statistics</h4>', unsafe_allow_html=True)
-    st.write(df.describe().T)
-    st.markdown('<p class="custom-text">STD is very hight in all columns about money</p>', unsafe_allow_html=True)
-
+    #==============
     # --- STEP 2 - STEP 2: Single Variable Analysis 
 
     st.markdown('<h3 ># STEP 2: Single Variable Analysis</h3>', unsafe_allow_html=True)
@@ -64,38 +46,19 @@ def render_global_analysis(df: pd.DataFrame) -> None:
     # Barplot for Country / Region
     st.markdown('<h4>Barplot for Country / Region</h4>', unsafe_allow_html=True)
     
-
-    counts, pct = country_counts_with_percentage(df)
+    # Compiuting stats for plot of number of Biloners
+    country_counts, country_pct = country_counts_with_percentage(df)
 
     # --- Barplot of Numbers of Biloners for region
-    fig = country_barplot(counts, pct)
+    fig = country_barplot(country_counts, country_pct)
     st.pyplot(fig)
 
-    # 
-    # Barplot for number of Bilioners in each industry
-    # 
-
+    # --- Barplot for number of Bilioners in each industry
     st.markdown('<h4>Barplot for number of Bilioners in each industry</h4>', unsafe_allow_html=True)
-    industry_counts = df['Industry'].value_counts()
-    total_records = len(df)
-    percentage = (industry_counts / total_records) * 100
-    plt.figure(figsize=(12, 6))
-    bars = industry_counts.plot(kind='bar', color='skyblue', width=0.7)
-    plt.ylim(0, industry_counts.max() + 20)
-    plt.title('Number of Bilioners in each industry', fontsize=16)
-    plt.xlabel('Industry', fontsize=14)
-    plt.ylabel('Number of Bilioners', fontsize=14)
-    for bar, count, perc in zip(bars.patches, industry_counts, percentage):
-        yval = bar.get_height()
-        plt.text(bar.get_x() + bar.get_width()/2, yval + 5, f'{count}', ha='center', va='bottom', fontsize=12)
-        plt.text(bar.get_x() + bar.get_width()/2, yval/2, f'{perc:.1f}%', ha='center', va='center', fontsize=12)
-    plt.xticks(rotation=65, fontsize=12)
-    plt.yticks(fontsize=12)
-    plt.grid(axis='y', linestyle='--', alpha=0.7)
-    plt.tight_layout()
-    st.pyplot(plt)
+    industry_counts, industry_percentage = compute_industry_counts(df)
+    fig = industry_barplot(industry_counts, industry_percentage)
+    st.pyplot(fig)
 
-    #
     # Total Net Worth of Millionaires by Industry
     # 
 
