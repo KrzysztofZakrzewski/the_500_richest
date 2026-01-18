@@ -6,6 +6,9 @@ import plotly.express as px
 # import statsmodels.api as sm
 import io
 
+from analysis.country_stats import country_counts_with_percentage
+from visualization.plots import country_barplot
+
 #==============
 # RENDER GLOBAL ANALIS
 #==============
@@ -16,17 +19,16 @@ def render_global_analysis(df: pd.DataFrame) -> None:
     st.markdown('<h2 >Global analysis</h2>', unsafe_allow_html=True)
 
 
-    # DATAFRAME
-    df
-
     buffer = io.StringIO()
     df.info(buf=buffer)
     info_str = buffer.getvalue()
 
-    ############
-    # STEP 1
-    # 
+    #==============
+    # EDA
+    #==============
 
+    # --- STEP 1 - General Overview 
+     
     st.markdown('<h3 ># STEP 1: General Overview of the Data (Technical Aspects)</h3>', unsafe_allow_html=True)
 
 
@@ -55,39 +57,19 @@ def render_global_analysis(df: pd.DataFrame) -> None:
     st.write(df.describe().T)
     st.markdown('<p class="custom-text">STD is very hight in all columns about money</p>', unsafe_allow_html=True)
 
-    ############
-    # STEP 2
-    # 
+    # --- STEP 2 - STEP 2: Single Variable Analysis 
 
     st.markdown('<h3 ># STEP 2: Single Variable Analysis</h3>', unsafe_allow_html=True)
 
     # Barplot for Country / Region
     st.markdown('<h4>Barplot for Country / Region</h4>', unsafe_allow_html=True)
-    # FUNCITON 
-
-    @st.cache_data
-    def barplot_for_country():
-        country_counts = df['Country / Region'].value_counts()
-        total_records = len(df)
-        percentage = (country_counts / total_records) * 100
-        return country_counts, percentage
-
-    country_counts, percentage = barplot_for_country()
-    plt.figure(figsize=(12, 6))
-    bars = country_counts.plot(kind='bar', color='skyblue', width=0.7)
-    plt.ylim(0, country_counts.max() + 20)
-    plt.title('Number of records in each Country / Region', fontsize=16)
-    plt.xlabel('Country / Region', fontsize=14)
-    plt.ylabel('Number of records', fontsize=14)
-    for bar, count, perc in zip(bars.patches, country_counts, percentage):
-        yval = bar.get_height()
-        plt.text(bar.get_x() + bar.get_width()/2, yval + 5, f'{count}', ha='center', va='bottom', fontsize=12)
-    # Wyświetlenie wykresu
-    plt.xticks(rotation=90, fontsize=12)
-    plt.yticks(fontsize=12)
-    plt.tight_layout()
-    st.pyplot(plt)
     
+
+    counts, pct = country_counts_with_percentage(df)
+
+    # --- Barplot of Numbers of Biloners for region
+    fig = country_barplot(counts, pct)
+    st.pyplot(fig)
 
     # 
     # Barplot for number of Bilioners in each industry
