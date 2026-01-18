@@ -6,8 +6,24 @@ import plotly.express as px
 # import statsmodels.api as sm
 import io
 
-from analysis.country_stats import country_counts_with_percentage, compute_industry_counts
-from visualization.plots import country_barplot, industry_barplot
+from analysis.statistics_for_global import (country_counts_with_percentage,
+                                    compute_industry_counts,
+                                    compute_total_net_worth_by_industry,
+                                    aggregate_net_worth_by_industry,
+                                    compute_ytd_net_income,
+                                    aggregate_ytd_net_income,
+                                    compute_correlation,
+                                    detect_outliers_iqr)
+
+from visualization.plots import (country_barplot,
+                                 industry_barplot,
+                                 industry_net_worth_barplot,
+                                 ytd_net_income_barplot,
+                                 coutry_plot_correlation_matrix,
+                                 plot_growth_vs_assets,
+                                 plot_total_net_worth_box,
+                                 universal_plot_box_by_industry)
+
 from analysis.data_overview import compute_basic_overview
 from ui.components.data_overview import render_basic_overview
 
@@ -59,112 +75,39 @@ def render_global_analysis(df: pd.DataFrame) -> None:
     fig = industry_barplot(industry_counts, industry_percentage)
     st.pyplot(fig)
 
-    # Total Net Worth of Millionaires by Industry
-    # 
-
+    # --- Total Net Worth of Millionaires by Industry
     st.markdown('<h4>Total Net Worth of Millionaires by Industry</h4>', unsafe_allow_html=True)
-    total_net_worth_ind_df = df.groupby('Industry', as_index=False)['Total net worth'].sum()
-    total_net_worth_ind_df = total_net_worth_ind_df.sort_values(by='Total net worth', ascending=False).reset_index(drop=True)
-    total_net_worth_ind_df
-
-    # 
-    # Barplot for Total Net Worth of Millionaires by Industry
-    # 
-
-    st.markdown('<h4>Barplot for Total Net Worth of Millionaires by Industry</h4>', unsafe_allow_html=True)
-
-    total_net_worth_ind_df['Total net worth'] = (total_net_worth_ind_df['Total net worth'] / 1e9).round(1)
-    total_net_worth_ind_df['Percentage'] = (total_net_worth_ind_df['Total net worth'] / total_net_worth_ind_df['Total net worth'].sum() * 100).round(1)
-    plt.figure(figsize=(12, 8))
-    bars = plt.bar(total_net_worth_ind_df['Industry'], total_net_worth_ind_df['Total net worth'], color='teal')
-    for bar, value in zip(bars, total_net_worth_ind_df['Total net worth']):
-        plt.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 1, f'{value}B', 
-                ha='center', va='bottom', fontsize=10)
-    for bar, pct in zip(bars, total_net_worth_ind_df['Percentage']):
-        plt.text(bar.get_x() + bar.get_width() / 2, bar.get_height() / 2, f'{pct}%', 
-                ha='center', va='center', fontsize=10, color='white')
-    plt.xticks(rotation=45, ha='right')
-    plt.title('Billionaires Total Net Worth by Industry (USD Billion)', fontsize=14)
-    plt.xlabel('Industry')
-    plt.ylabel('Net Worth (in USD billion)')
-    y_max = total_net_worth_ind_df['Total net worth'].max()
-    plt.ylim(0, y_max * 1.15 if y_max > 0 else 1)
-    plt.grid(axis='y', linestyle='--', alpha=0.7)
-    plt.tight_layout()
-    st.pyplot(plt)
-
-    # 
-    # YTD net income of Millionaires in a given industry
-    #
+    total_net_worth_ind_df = aggregate_net_worth_by_industry(df)
+    # st.dataframe(total_net_worth_ind_df) 
     
+    # --- Barplot for Total Net Worth of Millionaires by Industry
+    st.markdown('<h4>Barplot for Total Net Worth of Millionaires by Industry</h4>', unsafe_allow_html=True)
+    net_worth_df = compute_total_net_worth_by_industry(total_net_worth_ind_df)
+    fig = industry_net_worth_barplot(net_worth_df)
+    st.pyplot(fig)
+ 
+    # --- YTD net income of Millionaires in a given industry
     st.markdown('<h4>YTD net income of Millionaires in a given industry</h4>', unsafe_allow_html=True)
-    ytd_net_income_ind_df = df.groupby('Industry', as_index=False)['$ YTD change'].sum()
-    ytd_net_income_ind_df = ytd_net_income_ind_df.sort_values(by='$ YTD change', ascending=False).reset_index(drop=True)
-    ytd_net_income_ind_df
+    ytd_net_income_ind_df = aggregate_ytd_net_income(df)
 
-    # Barplot for YTD net income of Millionaires in a given industry
-
+    # --- Barplot for YTD net income of Millionaires in a given industry
     st.markdown('<h4>Barplot for YTD net income of Millionaires in a given industry</h4>', unsafe_allow_html=True)
-    ytd_net_income_ind_df['$ YTD change'] = pd.to_numeric(ytd_net_income_ind_df['$ YTD change'], errors='coerce').fillna(0)
-    ytd_net_income_ind_df['$ YTD change'] = (ytd_net_income_ind_df['$ YTD change'] / 1e9).round(2)
-    total_sum = ytd_net_income_ind_df['$ YTD change'].sum()
-    ytd_net_income_ind_df['Percentage'] = (ytd_net_income_ind_df['$ YTD change'] / total_sum * 100).round(1)
-    plt.figure(figsize=(16, 8))
-    bars = plt.bar(
-        ytd_net_income_ind_df['Industry'], 
-        ytd_net_income_ind_df['$ YTD change'], 
-        color=['green' if val >= 0 else 'red' for val in ytd_net_income_ind_df['$ YTD change']]
-    )
-    for bar, value, pct in zip(bars, ytd_net_income_ind_df['$ YTD change'], ytd_net_income_ind_df['Percentage']):
-        height = bar.get_height()
-        offset = 0.02 * plt.ylim()[1]
-        plt.text(
-            bar.get_x() + bar.get_width() / 2, 
-            height + offset,
-            f'{value}B', 
-            ha='center', va='bottom', fontsize=12
-        )
-        plt.text(
-            bar.get_x() + bar.get_width() / 2, 
-            height + 4 * offset,
-            f'{pct}%', 
-            ha='center', va='bottom', fontsize=12
-        )
-    plt.xticks(rotation=45, ha='right')
-    plt.title('Billionaires YTD Net Income by Industry (USD billion)', fontsize=14)
-    plt.xlabel('Industry')
-    plt.ylabel('Net revenue (in billion USD)')
-    y_min = ytd_net_income_ind_df['$ YTD change'].min()
-    y_max = ytd_net_income_ind_df['$ YTD change'].max()
-    plt.ylim(
-        y_min * 1.2 if y_min < 0 else -1,
-        y_max * 1.35 if y_max > 0 else 1
-    )
-    plt.grid(axis='y', linestyle='--', alpha=0.7)
-    plt.subplots_adjust(right=0.95, left=0.1, top=0.9, bottom=0.25)
-    plt.tight_layout()
-    st.pyplot(plt)
+    ytd_df = compute_ytd_net_income(ytd_net_income_ind_df)
+    fig = ytd_net_income_barplot(ytd_df)
+    st.pyplot(fig)
 
-    ############
-    # STEP 3
-    # 
+    #===========
+    # --- STEP 3 - Correlations
 
-    st.markdown('<h3 ># STEP 3: Correlations</h3>', unsafe_allow_html=True)
+    st.markdown('<h3>STEP 3: Correlations</h3>', unsafe_allow_html=True)
     st.markdown('<h4>Correlation Marix</h4>', unsafe_allow_html=True)
+    # --- Compiuting Matrix
+    corr_matrix = compute_correlation(df)
+    st.dataframe(corr_matrix)
 
-    corr_df = df.copy()
-    corr_df = corr_df.drop(columns = ['Name', 'Rank', 'Country / Region', 'Industry'])
-    corr_df.corr()
-    st.write(corr_df.corr())
-
-    correlation_matrix = corr_df.corr()
-
-    # Tworzenie wykresu macierzy korelacji
-    plt.figure(figsize=(6, 4))
-    sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt='.2f')
-    plt.title('Correlation Matrix')
-            
-    st.pyplot(plt)
+    # --- Matrix Plot
+    fig = coutry_plot_correlation_matrix(corr_matrix)
+    st.pyplot(fig)
 
     st.markdown('<p class="custom-text">Very strong correlation between: "YTD change" and "Total net worth" at 0.82. Strong correlation between:YTD change and Last change at 0.79Moderately strong correlation between:Last change and Total net worth at 0.65. </p>', unsafe_allow_html=True)
     st.markdown('<p class="custom-text">Strong correlation between: "YTD change" and "Last change" at 0.79.</p>', unsafe_allow_html=True)
@@ -172,159 +115,65 @@ def render_global_analysis(df: pd.DataFrame) -> None:
     st.markdown('<p class="custom-text">Moderately strong correlation between: "Last change" and "Total net worth" at 0.65.</p>', unsafe_allow_html=True)
     st.markdown('<p class="custom-text">💲We can jokingly risk saying that money attracts money💰.</p>', unsafe_allow_html=True)
 
-    # 
-    ## Interactive scaterplot
-    # 
+    #==============
+    # INTERACITVE SCATERPLOTS
+    #==============
     st.markdown('<h4>Interactive scaterplot</h4>', unsafe_allow_html=True)
 
-    df_filtered = df.copy()
-    fig = px.scatter(
-        df_filtered,
-        x='Total net worth',
-        y='$ YTD change',
-        color='Industry',
-        hover_name='Name',
-        size='Total net worth',
-        trendline='ols',
-        labels={
-            'Total net worth': 'Majątek netto (USD)',
-            '$ YTD change': 'Roczna zmiana (USD)'
-        },
-        title='Growth in income relative to assets for various industries',
-        height=800,
-        width=1100
-    )
-    for trace in fig.data:
-        if trace.name != 'Technology':
-            trace.visible = 'legendonly'
-    fig.update_layout(
-        xaxis_title='Net worth (USD)',
-        yaxis_title='Annual change (USD)',
-        legend_title='Industry',
-        template='plotly_white'
-    )
+    fig = plot_growth_vs_assets(df)
     st.plotly_chart(fig)
 
-    # 
+    #==============
     # STEP 4: Outlier Analysis
-    #
-    
-    st.markdown('<h3 ># STEP 4: Outlier Analysis</h3>', unsafe_allow_html=True)
+    st.markdown('<h3>STEP 4: Outlier Analysis</h3>', unsafe_allow_html=True)
     st.markdown('<p class="custom-text">Boxplot of Total Billionaire Net Worth of the estate</p>', unsafe_allow_html=True)
-    fig = px.box(
+
+    #--- Create a boxplot of total net worth for all billionaires.
+    fig = plot_total_net_worth_box(df)
+    st.plotly_chart(fig)
+
+    # --- Boxplot Billionaires by Industry
+    st.markdown('<h4 >Boxplot of Billionaires by Industry</h4>', unsafe_allow_html=True)
+
+
+    fig = universal_plot_box_by_industry(
         df,
-        x='Total net worth',
-        title='Boxplot of Total Billionaire Net Worth of the estate',
-        labels={'Total net worth': 'Total Net Worth of the estate (USD)'},
-        height=800,
-        width=1200
-    )
-    fig.update_layout(
-        xaxis_title='Total Net Worth of the estate (USD)',
-        template='plotly_white'
+        x_col='Total net worth',
+        title='Total Net Worth of Billionaires by Industry',
+        x_label='Total net worth (USD)',
+        highlight_industry='Technology'
     )
     st.plotly_chart(fig)
 
 
-    # Boxplot Billionaires by Industry
 
-    st.markdown('<h4>Boxplot of Billionaires by Industry</h4>', unsafe_allow_html=True)
-
-    fig = px.box(
-        df,
-        x='Total net worth',
-        y='Industry',
-        color='Industry',
-        title='Boxplot of Total Net Worth of Billionaires by Industry',
-        labels={
-            'Total net worth': 'Total net worth (USD)',
-            'Industry': 'Industry'
-        },
-        height=800,
-        width=1200
-    )
-    for trace in fig.data:
-        if trace.name != 'Technology':
-            trace.visible = 'legendonly'
-    fig.update_layout(
-        boxmode='group',
-        xaxis_title='Total net worth',
-        yaxis_title='Industry',
-        template='plotly_white'
-    )
-    st.plotly_chart(fig)
-
-    # Boxplot Billionaires by Industry
+    # --- Boxplot Billionaires by Industry
     st.markdown('<h4>Boxplot of YDT Billionaires by Industry</h4>', unsafe_allow_html=True)
 
-    fig = px.box(
+    fig = universal_plot_box_by_industry(
         df,
-        x='$ YTD change',
-        y='Industry',
-        color='Industry',
-        title='Boxplot of annual net worth income of billionaires ($ YTD change) by industry',
-        labels={
-            '$ YTD change': 'YTD change (USD)',
-            'Industry': 'Industry'
-        },
-        height=800,
-        width=1200 
-    )
-    for trace in fig.data:
-        if trace.name != 'Technology':
-            trace.visible = 'legendonly'
-    fig.update_layout(
-        boxmode='group',
-        xaxis_title='YTD change (USD)',
-        yaxis_title='Industry',
-        template='plotly_white'
+        x_col='$ YTD change',
+        title='Annual Net Worth Change ($ YTD) by Industry',
+        x_label='YTD change (USD)',
+        highlight_industry='Technology'
     )
     st.plotly_chart(fig)
 
     st.markdown('<h4>Boxplot of last change net worth ($ Last change) for industries</h4>', unsafe_allow_html=True)
 
-    fig = px.box(
+    # --- Boxplot of last change net worth ($ Last change)
+    fig = universal_plot_box_by_industry(
         df,
-        x='$ Last change',
-        y='Industry',
-        color='Industry',
-        title='Boxplot of last change net worth ($ Last change) for industries',
-        labels={
-            '$ Last change': 'Last change (USD)',
-            'Industry': 'Industry'
-        },
-        height=800,
-        width=1100
-    )
-    for trace in fig.data:
-        if trace.name != 'Technology':
-            trace.visible = 'legendonly'
-    fig.update_layout(
-        boxmode='group',
-        xaxis_title='Last change (USD)',
-        yaxis_title='Industry',
-        template='plotly_white'
+        x_col='$ Last change',
+        title='Annual Net Worth Change ($ YTD) by Industry',
+        x_label='$ Last change',
+        highlight_industry='Technology'
     )
     st.plotly_chart(fig)
 
-    # Outliners calculations
-
+    # --- Outliners calculations
     st.markdown('<h4>Outliner calculations</h4>', unsafe_allow_html=True)
-    df_outliners = df.drop(columns = ['Name', 'Rank', 'Country / Region', 'Industry'])
-    
-    def detect_outliers_iqr(df_outliners):
-        outliers = {}
-        for column in df_outliners.select_dtypes(include=[float, int]).columns:
-            Q1 = df_outliners[column].quantile(0.25)
-            Q3 = df_outliners[column].quantile(0.75)
-            IQR = Q3 - Q1
-            
-            lower_bound = Q1 - 1.5 * IQR
-            upper_bound = Q3 + 1.5 * IQR
-            outliers[column] = df_outliners[(df_outliners[column] < lower_bound) | (df_outliners[column] > upper_bound)]
-        return outliers
-    
-    outliers = detect_outliers_iqr(df_outliners)
+    outliers = detect_outliers_iqr(df)
 
     for column, outlier_data in outliers.items():
         st.write(f'Column: {column} have {len(outlier_data)} outliers.')
