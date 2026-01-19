@@ -1,11 +1,8 @@
 import pandas as pd
 import streamlit as st
 
-
-
-
 #  ==================
-# Basic Overview For Global
+# Basic Overview For Global And Countrys
 # ==================
 @st.cache_data
 def compute_basic_overview(df: pd.DataFrame) -> dict:

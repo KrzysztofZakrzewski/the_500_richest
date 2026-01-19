@@ -6,7 +6,7 @@ import plotly.express as px
 # import statsmodels.api as sm
 import io
 
-from analysis.data_overview_for_countries import compute_basic_country_overview
+from analysis.data_overview import compute_basic_overview 
 from ui.components.data_overview import render_basic_country_overview
 
 # =============
@@ -31,7 +31,7 @@ def render_countries(df: pd.DataFrame) -> None:
         "USA": "United States",
         "China": "China",
         "India": "India",
-        "Russia": "Russia",
+        "Russia": "Russian Federation",
         "Germany": "Germany",
     }
 
@@ -78,7 +78,7 @@ def render_country_view(df: pd.DataFrame, country: str) -> None:
     info_str = buffer.getvalue()
 
     # ===== COMPUTE =====
-    overview = compute_basic_country_overview(df_country)
+    overview = compute_basic_overview(df_country)
 
     # ===== RENDER =====
     render_basic_country_overview(overview, info_str)
