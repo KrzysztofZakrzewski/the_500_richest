@@ -12,6 +12,6 @@ def render_sidebar() -> str:
             [
                 "About",
                 "Global analysis",
-                "Countries",
+                "Countrys",
             ],
         )

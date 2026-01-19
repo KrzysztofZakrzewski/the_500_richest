@@ -11,11 +11,15 @@ import statsmodels.api as sm
 import io
 
 # --- Inner Imports
+# --- Global
 from loader.csv_loader import (load_data)
 from ui.styles import (inject_global_css)
 from ui.sidebar import (render_sidebar)
 from ui.pages.about import (render_about)
 from ui.pages.global_analis import (render_global_analysis)
+
+# --- Countrys
+from ui.pages.countrys import (render_countries)
 
 
 # --- Set global float display format for better readability
@@ -51,6 +55,9 @@ with col2:
         render_about()
     elif section == "Global analysis":
         render_global_analysis(df_ready)
+    elif section == "Countrys":
+        render_countries(df_ready)
+
 
     # if content_section == 'Countrys':
     #     st.title('Countrys')
