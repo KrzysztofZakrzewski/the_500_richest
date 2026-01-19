@@ -1,5 +1,13 @@
 import streamlit as st
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import plotly.express as px
+# import statsmodels.api as sm
+import io
+
+from analysis.data_overview_for_countries import compute_basic_country_overview
+from ui.components.data_overview import render_basic_country_overview
 
 # =============
 # Render Tabs
@@ -63,3 +71,14 @@ def render_country_view(df: pd.DataFrame, country: str) -> None:
         return
 
     st.dataframe(df_country)
+
+        # ===== INFO STRING =====
+    buffer = io.StringIO()
+    df_country.info(buf=buffer)
+    info_str = buffer.getvalue()
+
+    # ===== COMPUTE =====
+    overview = compute_basic_country_overview(df_country)
+
+    # ===== RENDER =====
+    render_basic_country_overview(overview, info_str)

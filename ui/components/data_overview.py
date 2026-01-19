@@ -32,3 +32,37 @@ def render_basic_overview(df: pd.DataFrame, overview: dict, info_str: str) -> No
 
     st.markdown('<h4>Descriptive Statistics</h4>', unsafe_allow_html=True)
     st.write(overview["describe"])
+
+
+#  ==================
+# Basic Overview For Countrys
+# ==================
+
+def render_basic_country_overview(
+    overview: dict,
+    info_str: str
+) -> None:
+    """
+    Render basic dataset overview in Streamlit.
+
+    Parameters
+    ----------
+    overview : dict
+        Output from compute_basic_country_overview.
+    info_str : str
+        Output of DataFrame.info() as string.
+    """
+    st.markdown("<h4>Basic information:</h4>", unsafe_allow_html=True)
+    st.text(info_str)
+
+    rows, cols = overview["shape"]
+    st.write(f"Columns: {cols}")
+    st.write(f"Rows: {rows}")
+
+    st.markdown("<h4>Nunique values</h4>", unsafe_allow_html=True)
+    st.write(overview["nunique"])
+
+    st.write(f"Unique values in total: {overview['unique_total']}")
+
+    st.markdown("<h4>Descriptive Statistics</h4>", unsafe_allow_html=True)
+    st.write(overview["describe"])

@@ -1,8 +1,13 @@
 import pandas as pd
 import streamlit as st
 
-@st.cache_data
 
+
+
+#  ==================
+# Basic Overview For Global
+# ==================
+@st.cache_data
 def compute_basic_overview(df: pd.DataFrame) -> dict:
     """
     Compute basic descriptive statistics and structural information
@@ -28,4 +33,6 @@ def compute_basic_overview(df: pd.DataFrame) -> dict:
         "unique_total": int(df.nunique().sum()),
         "describe": df.describe().T,
     }
+
+
 
