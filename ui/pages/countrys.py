@@ -1,7 +1,22 @@
 import streamlit as st
 import pandas as pd
 
+# =============
+# Render Tabs
+# =============
+
 def render_countries(df: pd.DataFrame) -> None:
+    """
+    Render the Countries section with tab-based views for selected countries.
+
+    Creates a separate tab for each country and renders the corresponding
+    country-specific analysis using a shared view function.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        Full dataset containing data for all countries.
+    """
     st.title("Countries")
 
     countries = {
@@ -18,9 +33,24 @@ def render_countries(df: pd.DataFrame) -> None:
         with tab:
             render_country_view(df, country_name)
 
-
+# =============
+# Render Single Country In Individual tab
+# =============
 
 def render_country_view(df: pd.DataFrame, country: str) -> None:
+    """
+    Render analysis and overview for a single country.
+
+    Filters the input DataFrame by the given country and displays
+    country-specific data and visualizations.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        Full dataset containing multiple countries.
+    country : str
+        Country name used to filter the dataset (value from 'Country / Region').
+    """
     st.markdown(
         f"<h3>General Overview of the Data for {country}</h3>",
         unsafe_allow_html=True
