@@ -195,4 +195,37 @@ def plot_country_correlation(corr_matrix: pd.DataFrame, title: str):
     return fig
 
 
+def plot_scatter_country(df_scatter: pd.DataFrame, title: str) -> px.scatter:
+    """
+    Create a scatter plot: Total net worth vs YTD change colored by Industry.
+    """
+    fig = px.scatter(
+        df_scatter,
+        x='Total net worth',
+        y='$ YTD change',
+        color='Industry',
+        hover_name='Name',
+        size='Total net worth',
+        trendline='ols',
+        labels={
+            'Total net worth': 'Net Worth (USD)',
+            '$ YTD change': 'Annual Change (USD)'
+        },
+        title=title,
+        height=800,
+        width=1100
+    )
 
+    # Ukryj wszystkie branże poza Technology
+    for trace in fig.data:
+        if trace.name != 'Technology':
+            trace.visible = 'legendonly'
+
+    fig.update_layout(
+        xaxis_title='Net Worth (USD)',
+        yaxis_title='Annual Change (USD)',
+        legend_title='Industry',
+        template='plotly_white'
+    )
+
+    return fig

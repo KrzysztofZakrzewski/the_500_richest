@@ -102,3 +102,15 @@ def compute_country_correlation(df_country: pd.DataFrame) -> pd.DataFrame:
     )
 
     return df_corr.corr()
+
+def prepare_scatter_country(df_country: pd.DataFrame) -> pd.DataFrame:
+    """
+    Prepare data for scatter plot: Total net worth vs YTD change.
+    """
+    # Kopiujemy dane (żeby nie zmieniać oryginału)
+    df_scatter = df_country.copy()
+
+    # Opcjonalnie można filtrować lub przetwarzać np. brakujące wartości
+    df_scatter = df_scatter.dropna(subset=['Total net worth', '$ YTD change'])
+
+    return df_scatter

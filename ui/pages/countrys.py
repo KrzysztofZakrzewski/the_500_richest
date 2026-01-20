@@ -122,3 +122,14 @@ def render_country_view(df: pd.DataFrame, country: str) -> None:
     st.dataframe(corr_matrix)
     fig = plot_country_correlation(corr_matrix, title=f"Correlation Matrix – {country}")
     st.pyplot(fig)
+
+
+    st.markdown(f'<h4>Interactive scaterplot for Growth in Income Relative to Assets of bilioners in {country}</h4>', unsafe_allow_html=True)
+
+    df_scatter = prepare_scatter_country(df_country)
+    if df_scatter.empty:
+        st.warning("No data to plot.")
+        return
+
+    fig = plot_scatter_country(df_scatter, title=f"Growth in Income Relative to Assets – {country}")
+    st.plotly_chart(fig, use_container_width=True)

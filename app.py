@@ -79,35 +79,7 @@ with col2:
 
 
 
-    #         st.markdown('<h4>Interactive scaterplot for bilioners in USA</h4>', unsafe_allow_html=True)
 
-    #         df_filtered_usa = df_usa.copy()
-    #         fig = px.scatter(
-    #             df_filtered_usa,
-    #             x='Total net worth',
-    #             y='$ YTD change',
-    #             color='Industry',
-    #             hover_name='Name',
-    #             size='Total net worth',
-    #             trendline='ols',
-    #             labels={
-    #                 'Total net worth': 'Net Worth (USD)',
-    #                 '$ YTD change': 'Annual Change (USD)'
-    #             },
-    #             title='Growth in Income Relative to Assets for Various Industries',
-    #             height=800,
-    #             width=1100
-    #         )
-    #         for trace in fig.data:
-    #             if trace.name != 'Technology':
-    #                 trace.visible = 'legendonly'
-    #         fig.update_layout(
-    #             xaxis_title='Net Worth (USD)',
-    #             yaxis_title='Annual Change (USD)',
-    #             legend_title='Industry',
-    #             template='plotly_white'
-    #         )
-    #         st.plotly_chart(fig, use_container_width=True)
 
 
     #         # # # # # # # #
