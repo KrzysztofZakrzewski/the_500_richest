@@ -50,7 +50,7 @@ I think anyone who’s ever written code has looked back and thought: “What a 
 
 It’s definitely more “written properly” than it was before. 😄
 
-![screenshot](assets/the500.png.png)
+![screenshot](assets/the500.png)
 
 Autor of app: https://github.com/KrzysztofZakrzewski
 
