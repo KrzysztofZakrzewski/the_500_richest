@@ -103,3 +103,11 @@ def render_country_view(df: pd.DataFrame, country: str) -> None:
     st.markdown(f'<h4>Barplot for Billionaires Total Net Worth by Industry in {country} (USD Billion)</h4>', unsafe_allow_html=True)
     fig = plot_total_net_worth_by_industry(net_worth_df, country)
     st.pyplot(fig)
+
+    # ===== YTD NET INCOME OF MILLIONAiRES IN GIVEN INDUSTRY=====
+    # --- COMPUTE
+    ytd_df = compute_ytd_income_by_industry(df_country)
+    # --- RENDER
+    st.markdown(f'<h4>YTD net income of Millionaires in a given industry in {country}</h4>', unsafe_allow_html=True)
+    fig = plot_ytd_income_by_industry(ytd_df, country)
+    st.pyplot(fig)

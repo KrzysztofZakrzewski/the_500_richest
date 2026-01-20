@@ -56,3 +56,35 @@ def compute_total_net_worth_by_industry(
     ).round(1)
 
     return result
+
+#==============
+# Compute YTD income by by industry
+#==============
+def compute_ytd_income_by_industry(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Compute YTD net income by industry.
+
+    Returns DataFrame with:
+    - Industry
+    - YTD change (USD billions)
+    - Percentage contribution
+    """
+    result = (
+        df.groupby("Industry", as_index=False)["$ YTD change"]
+        .sum()
+        .sort_values(by="$ YTD change", ascending=False)
+        .reset_index(drop=True)
+    )
+
+    result["$ YTD change"] = (
+        pd.to_numeric(result["$ YTD change"], errors="coerce")
+        .fillna(0)
+        / 1e9
+    ).round(2)
+
+    total_sum = result["$ YTD change"].sum()
+    result["Percentage"] = (
+        result["$ YTD change"] / total_sum * 100
+    ).round(1)
+
+    return result

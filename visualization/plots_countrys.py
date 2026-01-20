@@ -67,7 +67,7 @@ def render_industry_barplot_countrys(
     plt.tight_layout()
     st.pyplot(plt)
 
-# --- Render Total Net Worth B Industry Barplot
+# --- Render Total Net Worth By Industry Barplot
 def plot_total_net_worth_by_industry(
     df_industry: pd.DataFrame,
     country: str
@@ -108,6 +108,69 @@ def plot_total_net_worth_by_industry(
     ax.set_xlabel("Industry")
     ax.set_ylabel("Net Worth (USD billion)")
     ax.set_ylim(0, df_industry["Total net worth"].max() * 1.15)
+    ax.grid(axis="y", linestyle="--", alpha=0.7)
+    plt.xticks(rotation=45, ha="right")
+    plt.tight_layout()
+
+    return fig
+
+# --- Render YTD Income By Industry Barplot
+def plot_ytd_income_by_industry(
+    df_industry: pd.DataFrame,
+    country: str
+):
+    fig, ax = plt.subplots(figsize=(16, 8))
+
+    colors = [
+        "green" if val >= 0 else "red"
+        for val in df_industry["$ YTD change"]
+    ]
+
+    bars = ax.bar(
+        df_industry["Industry"],
+        df_industry["$ YTD change"],
+        color=colors
+    )
+
+    y_max = df_industry["$ YTD change"].max()
+    offset = 0.02 * abs(y_max) if y_max != 0 else 0.1
+
+    for bar, value, pct in zip(
+        bars,
+        df_industry["$ YTD change"],
+        df_industry["Percentage"]
+    ):
+        height = bar.get_height()
+        ax.text(
+            bar.get_x() + bar.get_width() / 2,
+            height + offset,
+            f"{value}B",
+            ha="center",
+            va="bottom",
+            fontsize=12
+        )
+        ax.text(
+            bar.get_x() + bar.get_width() / 2,
+            height + 4 * offset,
+            f"{pct}%",
+            ha="center",
+            va="bottom",
+            fontsize=12
+        )
+
+    ax.set_title(
+        f"Billionaires YTD Net Income by Industry in {country} (USD billion)",
+        fontsize=14
+    )
+    ax.set_xlabel("Industry")
+    ax.set_ylabel("Net revenue (USD billion)")
+
+    y_min = df_industry["$ YTD change"].min()
+    ax.set_ylim(
+        y_min * 1.2 if y_min < 0 else -1,
+        y_max * 1.35 if y_max > 0 else 1
+    )
+
     ax.grid(axis="y", linestyle="--", alpha=0.7)
     plt.xticks(rotation=45, ha="right")
     plt.tight_layout()
