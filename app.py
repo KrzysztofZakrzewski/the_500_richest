@@ -77,29 +77,7 @@ with col2:
 
 #  X
 
-    #         st.markdown('<h4>Barplot for Billionaires Total Net Worth by Industry in USA (USD Billion)</h4>', unsafe_allow_html=True)
 
-    #         total_net_worth_ind_usa_df = df_usa.groupby('Industry', as_index=False)['Total net worth'].sum()
-    #         total_net_worth_ind_usa_df = total_net_worth_ind_usa_df.sort_values(by='Total net worth', ascending=False).reset_index(drop=True)
-    #         total_net_worth_ind_usa_df['Total net worth'] = (total_net_worth_ind_usa_df['Total net worth'] / 1e9).round(1)
-    #         total_net_worth_ind_usa_df['Percentage'] = (total_net_worth_ind_usa_df['Total net worth'] / total_net_worth_ind_usa_df['Total net worth'].sum() * 100).round(1)
-    #         plt.figure(figsize=(12, 8))
-    #         bars = plt.bar(total_net_worth_ind_usa_df['Industry'], total_net_worth_ind_usa_df['Total net worth'], color='teal')
-    #         for bar, value in zip(bars, total_net_worth_ind_usa_df['Total net worth']):
-    #             plt.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 1, f'{value}B', 
-    #                     ha='center', va='bottom', fontsize=10)
-    #         for bar, pct in zip(bars, total_net_worth_ind_usa_df['Percentage']):
-    #             plt.text(bar.get_x() + bar.get_width() / 2, bar.get_height() / 2, f'{pct}%', 
-    #                     ha='center', va='center', fontsize=10, color='white')
-    #         plt.xticks(rotation=45, ha='right')
-    #         plt.title('Billionaires Total Net Worth by Industry in USA (USD Billion)', fontsize=14)
-    #         plt.xlabel('Industry')
-    #         plt.ylabel('Net Worth (in USD billion)')
-    #         y_max = total_net_worth_ind_usa_df['Total net worth'].max()
-    #         plt.ylim(0, y_max * 1.15 if y_max > 0 else 1)
-    #         plt.grid(axis='y', linestyle='--', alpha=0.7)
-    #         plt.tight_layout()
-    #         st.pyplot(plt)
 
     #         st.markdown('<h4>YTD net income of Millionaires in a given industry in USA</h4>', unsafe_allow_html=True)
 

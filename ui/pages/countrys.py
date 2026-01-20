@@ -7,10 +7,10 @@ import plotly.express as px
 import io
 
 from analysis.data_overview import compute_basic_overview
-from analysis.statistics_for_countries import compute_industry_distribution
+from analysis.statistics_for_countries import *
 from ui.components.data_overview import render_basic_country_overview
 
-from visualization.plots_countrys import render_industry_barplot_countrys
+from visualization.plots_countrys import *
 
 # =============
 # Render Tabs
@@ -82,17 +82,24 @@ def render_country_view(df: pd.DataFrame, country: str) -> None:
 
 
     # ===== BASIC OVERVIEW =====
-    # --- COMPUTE 
+    # --- COMPUTE
     overview = compute_basic_overview(df_country)
-
     # --- RENDER
+    st.markdown(f'<h3 ># STEP 1: General Overview of the Data for US{country}</h3>', unsafe_allow_html=True)
     render_basic_country_overview(overview, info_str)
 
+    st.markdown("<h3>STEP 2: Single Variable Analysis</h3>", unsafe_allow_html=True)
     # ===== INDUSTY DISTRIBUTION =====
     # --- COMPUTE
     industry_df = compute_industry_distribution(df_country)
-    
     # --- RENDER
-    st.markdown("<h3>STEP 2: Single Variable Analysis</h3>", unsafe_allow_html=True)
     st.markdown(f"<h4>Barplot of Billionaires by Industry in {country}</h4>", unsafe_allow_html=True)
     render_industry_barplot_countrys(industry_df, country)
+
+    # ===== TOTAL NET WORTH =====
+    # --- COMPUTE
+    net_worth_df = compute_total_net_worth_by_industry(df_country)
+    # --- RENDER
+    st.markdown(f'<h4>Barplot for Billionaires Total Net Worth by Industry in {country} (USD Billion)</h4>', unsafe_allow_html=True)
+    fig = plot_total_net_worth_by_industry(net_worth_df, country)
+    st.pyplot(fig)
