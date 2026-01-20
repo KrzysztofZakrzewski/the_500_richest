@@ -38,7 +38,8 @@ col1, col2, col3 = st.columns([1, 4, 1])
 # LOAD DATAFRAME
 # =============
 
-df_ready = load_data(path='top_rich2024_ready.csv')
+# --- ==> loader.py
+df_ready = load_data(path='data/top_rich2024_ready.csv')
 
 # =============
 # UI

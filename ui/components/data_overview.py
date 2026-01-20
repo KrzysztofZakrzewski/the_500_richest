@@ -1,6 +1,9 @@
 import pandas as pd
 import streamlit as st
 
+#  ==================
+# Basic Overview For Global Analysis
+# ==================
 def render_basic_overview(df: pd.DataFrame, overview: dict, info_str: str) -> None:
     """
     Render a basic overview of the dataset in the Streamlit UI.
@@ -37,7 +40,6 @@ def render_basic_overview(df: pd.DataFrame, overview: dict, info_str: str) -> No
 #  ==================
 # Basic Overview For Countrys
 # ==================
-
 def render_basic_country_overview(
     overview: dict,
     info_str: str
