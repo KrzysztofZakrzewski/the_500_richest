@@ -70,51 +70,12 @@ with col2:
 
     #         # RESET INDEX
 
-    #         buffer_usa = io.StringIO()
-    #         df_usa.info(buf=buffer_usa)
-    #         info_str_usa = buffer_usa.getvalue()
-
-    #         ############
-    #         # STEP 1
-    #         # 
-
-    #         # df_usa.info w Streamlit
-    #         st.markdown('<h4>Basic information:</h4>', unsafe_allow_html=True)
-    #         st.text(info_str_usa)
-
-    #         st.markdown('<h4>Nunique values</h4>', unsafe_allow_html=True)
-    #         st.write(df_usa.nunique())
-
-    #         st.write(f'Unique values in total: {df_usa.nunique().sum()}')
-    #         st.markdown('<h4>Descritive Statistics</h4>', unsafe_allow_html=True)
-    #         st.write(df_usa.describe().T)
 
     #         st.markdown('<h3 ># STEP 2: Single Variable Analysis</h3>', unsafe_allow_html=True)
     #         st.markdown('<h4>Barplot for Bilioners in each industry in USA</h4>', unsafe_allow_html=True)
 
 
-    #         industry_counts = df_usa['Industry'].value_counts()
-    #         total_records = len(df_usa)
-    #         percentage = (industry_counts / total_records) * 100
-
-    #         plt.figure(figsize=(12, 6))
-    #         bars = industry_counts.plot(kind='bar', color='skyblue', width=0.7)
-
-    #         plt.ylim(0, industry_counts.max() + 20)
-    #         plt.title('Number of Bilioners in each industry in usa', fontsize=16)
-    #         plt.xlabel('Industry', fontsize=14)
-    #         plt.ylabel('Number of Bilioners', fontsize=14)
-
-    #         for bar, count, perc in zip(bars.patches, industry_counts, percentage):
-    #             yval = bar.get_height()
-    #             plt.text(bar.get_x() + bar.get_width()/2, yval + 5, f'{count}', ha='center', va='bottom', fontsize=12)
-    #             plt.text(bar.get_x() + bar.get_width()/2, yval/2, f'{perc:.1f}%', ha='center', va='center', fontsize=12)
-
-    #         plt.xticks(rotation=65, fontsize=12)
-    #         plt.yticks(fontsize=12)
-    #         plt.grid(axis='y', linestyle='--', alpha=0.7)
-    #         plt.tight_layout()
-    #         st.pyplot(plt)
+#  X
 
     #         st.markdown('<h4>Barplot for Billionaires Total Net Worth by Industry in USA (USD Billion)</h4>', unsafe_allow_html=True)
 
@@ -318,6 +279,7 @@ with col2:
     #         plt.ylabel('Number of occurrences')
     #         st.pyplot(plt)
 
+    # XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     #     with tab1:
     #         st.markdown('<h3 ># STEP 1: General Overview of the Data for China</h3>', unsafe_allow_html=True)
     #         # st.write(df_ready['Country / Region'].unique())
@@ -333,6 +295,7 @@ with col2:
     #         ############
     #         # STEP 1
     #         # 
+
 
     #         # df_china.info w Streamlit
     #         st.markdown('<h4>Basic information:</h4>', unsafe_allow_html=True)

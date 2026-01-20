@@ -6,8 +6,11 @@ import plotly.express as px
 # import statsmodels.api as sm
 import io
 
-from analysis.data_overview import compute_basic_overview 
+from analysis.data_overview import compute_basic_overview
+from analysis.statistics_for_countries import compute_industry_distribution
 from ui.components.data_overview import render_basic_country_overview
+
+from visualization.plots_countrys import render_industry_barplot_countrys
 
 # =============
 # Render Tabs
@@ -72,13 +75,24 @@ def render_country_view(df: pd.DataFrame, country: str) -> None:
 
     st.dataframe(df_country)
 
-        # ===== INFO STRING =====
+    # ===== INFO STRING =====
     buffer = io.StringIO()
     df_country.info(buf=buffer)
     info_str = buffer.getvalue()
 
-    # ===== COMPUTE =====
+
+    # ===== BASIC OVERVIEW =====
+    # --- COMPUTE 
     overview = compute_basic_overview(df_country)
 
-    # ===== RENDER =====
+    # --- RENDER
     render_basic_country_overview(overview, info_str)
+
+    # ===== INDUSTY DISTRIBUTION =====
+    # --- COMPUTE
+    industry_df = compute_industry_distribution(df_country)
+    
+    # --- RENDER
+    st.markdown("<h3>STEP 2: Single Variable Analysis</h3>", unsafe_allow_html=True)
+    st.markdown(f"<h4>Barplot of Billionaires by Industry in {country}</h4>", unsafe_allow_html=True)
+    render_industry_barplot_countrys(industry_df, country)
