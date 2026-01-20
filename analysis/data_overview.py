@@ -1,7 +1,7 @@
 import pandas as pd
 import streamlit as st
 
-#  ==================
+# ==================
 # Basic Overview For Global And Countrys
 # ==================
 @st.cache_data

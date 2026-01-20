@@ -1,11 +1,10 @@
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-import plotly.express as px
-# import statsmodels.api as sm
 import io
 
+#==============
+# --- Inner Imports
+#==============
 from analysis.statistics_for_global import (country_counts_with_percentage,
                                     compute_industry_counts,
                                     compute_total_net_worth_by_industry,
