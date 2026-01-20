@@ -60,20 +60,6 @@ with col2:
 
 
     # if content_section == 'Countrys':
-    #     st.title('Countrys')
-    #     tab0, tab1, tab2, tab3, tab4 = st.tabs(["USA", "China", "India", "Rusia", "Germany"])
-    #     with tab0:
-    #         st.markdown('<h3 ># STEP 1: General Overview of the Data for USA</h3>', unsafe_allow_html=True)
-    #         # st.write(df_ready['Country / Region'].unique())
-    #         df_usa = df_ready[df_ready['Country / Region'] == 'United States'].copy()
-    #         df_usa
-
-    #         # RESET INDEX
-
-
-    #         st.markdown('<h3 ># STEP 2: Single Variable Analysis</h3>', unsafe_allow_html=True)
-    #         st.markdown('<h4>Barplot for Bilioners in each industry in USA</h4>', unsafe_allow_html=True)
-
 
 #  X
 
@@ -82,92 +68,6 @@ with col2:
 
 
 
-    #         # # # # # # # #
-    #         # STEP 4
-
-    #         st.markdown('<h3 ># STEP 4: Outlier Analysis for USA</h3>', unsafe_allow_html=True)
-
-    #         st.markdown('<h4 >Boxplot of Total Net Worth of Billionaires in USA</h4>', unsafe_allow_html=True)
-
-    #         fig = px.box(
-    #         df_usa,
-    #         x='Total net worth',
-    #         title='Boxplot of Total Billionaire Net Worth of the estate',
-    #         labels={'Total net worth': 'Total Net Worth of the estate (USD)'},
-    #         height=800,
-    #         width=1200
-    #         )
-    #         fig.update_layout(
-    #             xaxis_title='Total Net Worth of the estate (USD)',
-    #             template='plotly_white'
-    #         )
-    #         st.plotly_chart(fig, use_container_width=True)
-
-
-    #         st.markdown('<h4 >Boxplot of Total Net Worth of Billionaires by Industry in USA</h4>', unsafe_allow_html=True)
-
-    #         fig = px.box(
-    #             df_usa,
-    #             x='Total net worth',
-    #             y='Industry',
-    #             color='Industry',
-    #             title='Boxplot of Total Net Worth of Billionaires by Industry in USA',
-    #             labels={
-    #                 'Total net worth': 'Total Net Worth (USD)',
-    #                 'Industry': 'Industry'
-    #             },
-    #             height=800,
-    #             width=1200
-    #         )
-    #         for trace in fig.data:
-    #             if trace.name != 'Technology':
-    #                 trace.visible = 'legendonly'
-    #         fig.update_layout(
-    #             boxmode='group',
-    #             xaxis_title='Total Net Worth (USD)',
-    #             yaxis_title='Industry',
-    #             template='plotly_white'
-    #         )
-    #         st.plotly_chart(fig, use_container_width=True)
-
-
-    #         st.markdown('<h4 >Boxplot of last change net worth ($ Last change) for industries in USA</h4>', unsafe_allow_html=True)
-
-    #         fig = px.box(
-    #             df_usa,
-    #             x='$ Last change',
-    #             y='Industry',
-    #             color='Industry',
-    #             title='Boxplot of last change net worth ($ Last change) for industries in USA',
-    #             labels={
-    #                 '$ Last change': 'Last Change (USD)',
-    #                 'Industry': 'Industry'
-    #             },
-    #             height=800,
-    #             width=1100
-    #         )
-
-    #         for trace in fig.data:
-    #             if trace.name != 'Technology':
-    #                 trace.visible = 'legendonly'
-
-    #         fig.update_layout(
-    #             boxmode='group',
-    #             xaxis_title='Last Change (USD)',
-    #             yaxis_title='Industry',
-    #             template='plotly_white'
-    #         )
-
-    #         st.plotly_chart(fig, use_container_width=True)
-
-    #         st.markdown('<h4 >Histogram of the number of bilioners in Usa</h4>', unsafe_allow_html=True)
-
-    #         plt.figure(figsize=(14, 8))
-    #         sns.histplot(df_usa['Total net worth'], bins=80, kde=True)  # Możesz dostosować liczbę bins
-    #         plt.title('Histogram of the number of bilioners in Usa')
-    #         plt.xlabel('Total Net Worth')
-    #         plt.ylabel('Number of occurrences')
-    #         st.pyplot(plt)
 
     # XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     #     with tab1:

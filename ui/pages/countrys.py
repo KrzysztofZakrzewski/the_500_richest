@@ -81,13 +81,14 @@ def render_country_view(df: pd.DataFrame, country: str) -> None:
     info_str = buffer.getvalue()
 
 
-    # ===== BASIC OVERVIEW =====
+    # ===== STEP 1 BASIC OVERVIEW =====
     # --- COMPUTE
     overview = compute_basic_overview(df_country)
     # --- RENDER
     st.markdown(f'<h3 ># STEP 1: General Overview of the Data for US{country}</h3>', unsafe_allow_html=True)
     render_basic_country_overview(overview, info_str)
 
+    # ===== STEMP 2 SINGLE VARIABLE ANALIS =====
     st.markdown("<h3>STEP 2: Single Variable Analysis</h3>", unsafe_allow_html=True)
     # ===== INDUSTY DISTRIBUTION =====
     # --- COMPUTE
@@ -104,7 +105,7 @@ def render_country_view(df: pd.DataFrame, country: str) -> None:
     fig = plot_total_net_worth_by_industry(net_worth_df, country)
     st.pyplot(fig)
 
-    # ===== YTD NET INCOME OF MILLIONAiRES IN GIVEN INDUSTRY=====
+    # ===== YTD NET INCOME OF MILLIONAiRES IN GIVEN INDUSTRY =====
     # --- COMPUTE
     ytd_df = compute_ytd_income_by_industry(df_country)
     # --- RENDER
@@ -112,7 +113,7 @@ def render_country_view(df: pd.DataFrame, country: str) -> None:
     fig = plot_ytd_income_by_industry(ytd_df, country)
     st.pyplot(fig)
 
-    # ===== CORELATIONS
+    # ===== STEP 3 CORELATIONS =====
     st.markdown('<h3 ># STEP 3: Correlations</h3>', unsafe_allow_html=True)
 
     st.markdown(f'<h4>Correlation Matrix for bilioners in {country}</h4>', unsafe_allow_html=True)
@@ -123,13 +124,49 @@ def render_country_view(df: pd.DataFrame, country: str) -> None:
     fig = plot_country_correlation(corr_matrix, title=f"Correlation Matrix – {country}")
     st.pyplot(fig)
 
-
+    # =====  FROWTH IN INCOME RELATIVE TO ASSETS =====
     st.markdown(f'<h4>Interactive scaterplot for Growth in Income Relative to Assets of bilioners in {country}</h4>', unsafe_allow_html=True)
 
+    # --- COMPUTE
     df_scatter = prepare_scatter_country(df_country)
     if df_scatter.empty:
         st.warning("No data to plot.")
         return
-
+    # --- RENDER
     fig = plot_scatter_country(df_scatter, title=f"Growth in Income Relative to Assets – {country}")
     st.plotly_chart(fig, use_container_width=True)
+
+
+    # ===== STEP 4 OUTLINERS =====
+    st.markdown(f'<h3 ># STEP 4: Outliners Analysis for {country}</h3>', unsafe_allow_html=True)
+    st.markdown(f'<h4 >Boxplot of Total Net Worth of Billionaires in {country}</h4>', unsafe_allow_html=True)
+
+    # --- COMPUTE
+    df_boxplot = prepare_boxplot_data_country(df_country, column="Total net worth")
+    # --- RENDER
+    fig = plot_boxplot_total_net_worth_country(df_boxplot, country)
+    st.plotly_chart(fig, use_container_width=True)
+
+    # ===== Boxplot of Total Net Worth =====
+    st.markdown(f'<h4 >Boxplot of Total Net Worth of Billionaires by Industry in {country}</h4>', unsafe_allow_html=True)
+    # --- COMPUTE
+    df_boxplot = prepare_industry_boxplot_data_country(df_country, value_column="Total net worth", category_column="Industry")
+    # --- RENDER
+    fig = plot_industry_boxplot_total_net_worth_country( df_boxplot, country, highlight_industry="Technology")
+    st.plotly_chart(fig, use_container_width=True)
+
+    # ===== Boxplot of last change net worth ($ Last change) for industries =====
+    st.markdown(f'<h4 >Boxplot of last change net worth ($ Last change) for industries in {country}</h4>', unsafe_allow_html=True)
+    # --- COMPUTE
+    df_boxplot = prepare_industry_boxplot_last_change_country(df_country)
+    # --- RENDER
+    fig = plot_industry_boxplot_last_change_country(df_boxplot, country, highlight_industry="Technology")
+    st.plotly_chart(fig, use_container_width=True)
+
+    # ===== Boxplot of last change net worth ($ Last change) for industries for echa country =====
+    st.markdown(f'<h4 >Histogram of the number of bilioners in {country}</h4>', unsafe_allow_html=True)
+    # --- COMPUTE
+    net_worth_data = prepare_net_worth_histogram_country(df_country)
+    # --- RENDER
+    fig = plot_net_worth_histogram_country(net_worth_data, country)
+    st.pyplot(fig)
