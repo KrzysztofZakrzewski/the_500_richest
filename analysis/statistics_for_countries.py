@@ -88,3 +88,17 @@ def compute_ytd_income_by_industry(df: pd.DataFrame) -> pd.DataFrame:
     ).round(1)
 
     return result
+
+#==============
+# Compute correlation matrix for countrys
+#==============
+def compute_country_correlation(df_country: pd.DataFrame) -> pd.DataFrame:
+    """
+    Compute correlation matrix for numeric columns only.
+    """
+    df_corr = df_country.drop(
+        columns=["Name", "Rank", "Country / Region", "Industry"],
+        errors="ignore"
+    )
+
+    return df_corr.corr()

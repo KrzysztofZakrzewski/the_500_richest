@@ -111,3 +111,14 @@ def render_country_view(df: pd.DataFrame, country: str) -> None:
     st.markdown(f'<h4>YTD net income of Millionaires in a given industry in {country}</h4>', unsafe_allow_html=True)
     fig = plot_ytd_income_by_industry(ytd_df, country)
     st.pyplot(fig)
+
+    # ===== CORELATIONS
+    st.markdown('<h3 ># STEP 3: Correlations</h3>', unsafe_allow_html=True)
+
+    st.markdown(f'<h4>Correlation Matrix for bilioners in {country}</h4>', unsafe_allow_html=True)
+    # --- COMPUTE
+    corr_matrix = compute_country_correlation(df_country)
+    # --- RENDER
+    st.dataframe(corr_matrix)
+    fig = plot_country_correlation(corr_matrix, title=f"Correlation Matrix – {country}")
+    st.pyplot(fig)

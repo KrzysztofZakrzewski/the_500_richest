@@ -176,3 +176,23 @@ def plot_ytd_income_by_industry(
     plt.tight_layout()
 
     return fig
+
+# --- Render corelation heat map for countrys 
+def plot_country_correlation(corr_matrix: pd.DataFrame, title: str):
+    """
+    Plot correlation heatmap.
+    """
+    fig, ax = plt.subplots(figsize=(10, 8))
+    sns.heatmap(
+        corr_matrix,
+        annot=True,
+        cmap="coolwarm",
+        fmt=".2f",
+        ax=ax
+    )
+    ax.set_title(title)
+
+    return fig
+
+
+

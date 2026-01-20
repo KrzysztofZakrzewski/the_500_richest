@@ -79,66 +79,6 @@ with col2:
 
 
 
-    #         st.markdown('<h4>YTD net income of Millionaires in a given industry in USA</h4>', unsafe_allow_html=True)
-
-    #         ytd_net_income_ind_usa_df = df_usa.groupby('Industry', as_index=False)['$ YTD change'].sum()
-    #         ytd_net_income_ind_usa_df = ytd_net_income_ind_usa_df.sort_values(by='$ YTD change', ascending=False).reset_index(drop=True)
-    #         ytd_net_income_ind_usa_df['$ YTD change'] = pd.to_numeric(ytd_net_income_ind_usa_df['$ YTD change'], errors='coerce').fillna(0)
-    #         ytd_net_income_ind_usa_df['$ YTD change'] = (ytd_net_income_ind_usa_df['$ YTD change'] / 1e9).round(2)
-    #         total_sum = ytd_net_income_ind_usa_df['$ YTD change'].sum()
-    #         ytd_net_income_ind_usa_df['Percentage'] = (ytd_net_income_ind_usa_df['$ YTD change'] / total_sum * 100).round(1)
-    #         plt.figure(figsize=(16, 8))
-    #         bars = plt.bar(
-    #             ytd_net_income_ind_usa_df['Industry'], 
-    #             ytd_net_income_ind_usa_df['$ YTD change'], 
-    #             color=['green' if val >= 0 else 'red' for val in ytd_net_income_ind_usa_df['$ YTD change']]
-    #         )
-    #         for bar, value, pct in zip(bars, ytd_net_income_ind_usa_df['$ YTD change'], ytd_net_income_ind_usa_df['Percentage']):
-    #             height = bar.get_height()
-    #             offset = 0.02 * plt.ylim()[1]
-    #             plt.text(
-    #                 bar.get_x() + bar.get_width() / 2, 
-    #                 height + offset, 
-    #                 f'{value}B', 
-    #                 ha='center', va='bottom', fontsize=12
-    #             )
-    #             plt.text(
-    #                 bar.get_x() + bar.get_width() / 2, 
-    #                 height + 4 * offset, 
-    #                 f'{pct}%', 
-    #                 ha='center', va='bottom', fontsize=12
-    #             )
-    #         plt.xticks(rotation=45, ha='right')
-    #         plt.title('Billionaires YTD Net Income by Industry (USD billion)', fontsize=14)
-    #         plt.xlabel('Industry')
-    #         plt.ylabel('Net revenue (in billion USD)')
-    #         y_min = ytd_net_income_ind_usa_df['$ YTD change'].min()
-    #         y_max = ytd_net_income_ind_usa_df['$ YTD change'].max()
-    #         plt.ylim(
-    #             y_min * 1.2 if y_min < 0 else -1,
-    #             y_max * 1.35 if y_max > 0 else 1
-    #         )
-    #         plt.grid(axis='y', linestyle='--', alpha=0.7)
-    #         plt.subplots_adjust(right=0.95, left=0.1, top=0.9, bottom=0.25)
-    #         plt.tight_layout()
-    #         st.pyplot(plt)
-
-    #         st.markdown('<h3 ># STEP 3: Correlations</h3>', unsafe_allow_html=True)
-
-    #         st.markdown('<h4>Correlation Matrix for bilioners in USA</h4>', unsafe_allow_html=True)
-
-    #         corr_usa_df = df_usa.copy()
-    #         corr_usa_df = corr_usa_df.drop(columns = ['Name', 'Rank', 'Country / Region', 'Industry'])
-    #         corr_usa_df.corr()
-    #         correlation_matrix_usa = corr_usa_df.corr()
-
-    #         # Tworzenie wykresu macierzy korelacji
-    #         plt.figure(figsize=(10, 8))
-    #         sns.heatmap(correlation_matrix_usa, annot=True, cmap='coolwarm', fmt='.2f')
-    #         plt.title('Correlation Matrix')
-    #         st.pyplot(plt)
-
-
     #         st.markdown('<h4>Interactive scaterplot for bilioners in USA</h4>', unsafe_allow_html=True)
 
     #         df_filtered_usa = df_usa.copy()
