@@ -30,6 +30,3 @@ def compute_basic_overview(df: pd.DataFrame) -> dict:
         "unique_total": int(df.nunique().sum()),
         "describe": df.describe().T,
     }
-
-
-

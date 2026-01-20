@@ -1,0 +1,10 @@
+name: the_500_richest
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3.11
+  - streamlit
+  - matplotlib
+  - seaborn
+  - plotly

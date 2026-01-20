@@ -162,7 +162,6 @@ def industry_net_worth_barplot(
 
     return fig
 
-
 def ytd_net_income_barplot(df: pd.DataFrame) -> plt.Figure:
     """
     Create a bar plot for YTD net income by industry.
@@ -223,7 +222,6 @@ def ytd_net_income_barplot(df: pd.DataFrame) -> plt.Figure:
     plt.tight_layout()
     
     return fig
-
 
 def coutry_plot_correlation_matrix(correlation_matrix: pd.DataFrame) -> plt.Figure:
     """
@@ -296,7 +294,7 @@ def plot_growth_vs_assets(df: pd.DataFrame) -> go.Figure:
 
 # ===========
 # OUTLINERS
-
+# ===========
 def plot_total_net_worth_box(df: pd.DataFrame) -> go.Figure:
     """
     Create a boxplot of total net worth for all billionaires.
@@ -326,54 +324,6 @@ def plot_total_net_worth_box(df: pd.DataFrame) -> go.Figure:
     )
     
     return fig
-
-# def plot_net_worth_by_industry_box(df: pd.DataFrame, highlight_industry: str = 'Technology') -> go.Figure:
-#     """
-#     Create a grouped boxplot of total net worth by industry.
-
-#     Optionally, highlight one industry (others hidden by default).
-
-#     Parameters
-#     ----------
-#     df : pd.DataFrame
-#         DataFrame containing 'Total net worth' and 'Industry'.
-#     highlight_industry : str, optional
-#         Industry to highlight (default 'Technology').
-
-#     Returns
-#     -------
-#     plotly.graph_objects.Figure
-#         Plotly boxplot figure grouped by Industry.
-#     """
-#     fig = px.box(
-#         df,
-#         x='Total net worth',
-#         y='Industry',
-#         color='Industry',
-#         title='Total Net Worth of Billionaires by Industry',
-#         labels={
-#             'Total net worth': 'Total net worth (USD)',
-#             'Industry': 'Industry'
-#         },
-#         height=800,
-#         width=1200
-#     )
-
-#     # Ukryj wszystkie branże poza highlight_industry
-#     for trace in fig.data:
-#         if trace.name != highlight_industry:
-#             trace.visible = 'legendonly'
-
-#     fig.update_layout(
-#         boxmode='group',
-#         xaxis_title='Total net worth (USD)',
-#         yaxis_title='Industry',
-#         template='plotly_white'
-#     )
-
-#     return fig
-
-
 
 def universal_plot_box_by_industry(
     df: pd.DataFrame,
